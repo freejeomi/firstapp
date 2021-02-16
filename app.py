@@ -25,27 +25,33 @@ DEFAULTS = {'publication':'hackernews','city': 'London'}
 
 # app route for default and bbc
 @app.route("/", methods=['GET','POST'])
-def publish_news():
-    query = request.form.get("publication")
+def home():
+    # get customized headlines, based on user input or default
+    publication = request.args.get('publication')
+    if not publication:
+        publication = DEFAULTS['publication']
+    articles = get_news(publication)
+    # get customized weather based on user input or default
+    city = request.args.get('city')
+    if not city:
+        city = DEFAULTS['city']
+    weather = get_weather(city)
+    return render_template("home.html", articles=articles,
+                           weather=weather)
+    pass
+
+# define function get_news (query)
+def get_news(query):
     if not query or query.lower() not in RSS_FEEDS:
-        publication = "hackernews"
+        publication = DEFAULTS["publication"]
         pass
     else:
         publication = query.lower()
         pass
     feed = feedparser.parse(RSS_FEEDS[publication])
-    weather = get_weather("London")
-    return render_template("home.html", articles=feed['entries'], weather = weather)
-
-    # rest of code unchanged
+    return feed['entries']
     pass
 
-
-# function that calls the publications ==> no more necessary
-# def get_news(publication):
-#     feed = feedparser.parse(RSS_FEEDS[publication])
-#     #first_article = feed['entries'][0]
-#     return render_template("home.html", articles=feed['entries'])
 
 # another function for the weather
 def get_weather(query):
