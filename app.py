@@ -53,9 +53,9 @@ def get_news(query):
     pass
 
 
-# another function for the weather
+# another function for the weather.
 def get_weather(query):
-    api_url = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=6146c3c14476a0b727901203fd042263"
+    api_url = "http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=<appid>"
     query = urllib.parse.quote(query) # make this a good html query string
     url = api_url.format(query) # add it to the api_url string above
     data = urllib.request.urlopen(url) # make a request to the url now
